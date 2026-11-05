@@ -394,10 +394,11 @@ export function ProphetsScreen({ navigation: propNav }: any) {
     scanDownloadedFiles();
   }, []);
 
+  // ✅ تعديل 1: إعدادات الصوت للتشغيل في الخلفية (expo-audio)
   useEffect(() => {
     setAudioModeAsync({
       playsInSilentMode: true,
-      staysActiveInBackground: true,
+      shouldPlayInBackground: true,
     }).catch(() => {});
   }, []);
 
@@ -437,6 +438,14 @@ export function ProphetsScreen({ navigation: propNav }: any) {
         player.seekTo(resumeAt);
       }
       player.play();
+
+      // ✅ تعديل 2: تفعيل التحكم على شاشة القفل والخدمة الأمامية (تشغيل مع قفل الهاتف)
+      try {
+        player.setActiveForLockScreen(true, {
+          title: story.title,
+          artist: 'الشيخ نبيل العوضي',
+        });
+      } catch {}
     } catch (e) {
       console.warn('Load story error:', e);
     } finally {
